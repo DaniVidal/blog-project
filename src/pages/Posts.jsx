@@ -2,26 +2,29 @@ import { useEffect, useState } from "react"
 import { Layout } from "../components/Layout"
 import { client } from "../lib/createClient";
 import { Link } from "react-router-dom";
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button, Pagination } from 'react-bootstrap';
 
-export const Home = () => {
+export const Posts = () => {
     const [categories, setCategories] = useState([]); // retorna um array
     const [posts, setPosts] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
     // ciclo de vida de componentes
     // posso escrever JavaScript
     useEffect(() => {
-        console.log('olaaaaaaa');
         // Pedir para o objeto client buscar os últimos 5 posts
         client
             .getEntries({
                 content_type: 'blogPost',
-                limit: 3,
+                limit: 5,
+                skip: (currentPage - 1) * 5,
                 order: "-sys.createdAt"
             })
             .then(function (entries) {
                 console.log('posts', entries.items);
                 setPosts(entries.items);
+                setTotalPages(Math.ceil(entries.total / 5));
             });
 
         // Pedir para o objeto client buscar todas as categorias
@@ -33,14 +36,18 @@ export const Home = () => {
                 console.log('categorias', entries.items);
                 setCategories(entries.items);
             });
-    }, []); // array vazio indica o onload do componente
+    }, [currentPage]); // array vazio indica o onload do componente
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
 
     return (
         <Layout>
             <div className="container">
                 <div className="row">
                     <main className="col-md-8">
-                        <h1 className="my-3">Últimos posts</h1>
+                        <h1 className="my-3">Todos os posts</h1>
 
                         {posts.map(post => (
                             <div className="card mb-3" key={post.sys.id}>
@@ -53,9 +60,20 @@ export const Home = () => {
                                 </div>
                             </div>
                         ))}
-
-                        <Link to={`/posts`} className="btn btn-primary">
-                            Ver todos os posts
+                        
+                        <Pagination>
+                            {Array.from({ length: totalPages }, (_, index) => (
+                            <Pagination.Item
+                                key={index}
+                                active={index + 1 === currentPage}
+                                onClick={() => handlePageChange(index + 1)}
+                            >
+                                {index + 1}
+                            </Pagination.Item>
+                            ))}
+                        </Pagination>
+                        <Link to="/" className="btn btn-primary">
+                            Voltar para Home
                         </Link>
                     </main>
                 
