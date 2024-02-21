@@ -18,7 +18,7 @@ Este é um projeto de blog desenvolvido em React utilizando o framework Bootstra
 
 ## Como Executar o Projeto
 * Clone este repositório para o seu ambiente local.
-* Certifique-se de ter o Node.js instalado em sua máquina.
-* No diretório do projeto, execute o comando npm install para instalar as dependências necessárias.
-* Após a instalação das dependências, execute o comando npm run dev para iniciar o servidor de desenvolvimento.
+* Certifique-se de ter o `Node.js` instalado em sua máquina.
+* No diretório do projeto, execute o comando `npm install` para instalar as dependências necessárias.
+* Após a instalação das dependências, execute o comando `npm run dev` para iniciar o servidor de desenvolvimento.
 * Abra o navegador e acesse http://localhost:3000 para visualizar o blog.
